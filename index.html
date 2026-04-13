@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tobi Nailed It – Book an Appointment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink: #f472b6;
+    --pink-light: #fce7f3;
+    --pink-deep: #db2777;
+    --black: #0d0d0d;
+    --charcoal: #1a1a1a;
+    --grey: #2e2e2e;
+    --white: #fff;
+    --muted: #888;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; overflow-x: hidden; }
+  header { position: relative; text-align: center; padding: 70px 24px 50px; overflow: hidden; }
+  header::before { content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; background: radial-gradient(circle, rgba(244,114,182,0.18) 0%, transparent 70%); pointer-events: none; }
+  .logo-tag { display: inline-block; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--pink); border: 1px solid rgba(244,114,182,0.35); padding: 6px 18px; border-radius: 100px; margin-bottom: 24px; animation: fadeUp 0.6s ease both; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1.05; animation: fadeUp 0.7s 0.1s ease both; }
+  h1 span { color: var(--pink); font-style: italic; }
+  .subtitle { margin-top: 16px; color: var(--muted); font-size: 15px; font-weight: 300; animation: fadeUp 0.7s 0.2s ease both; }
+  .divider { width: 40px; height: 2px; background: var(--pink); margin: 30px auto 0; animation: fadeUp 0.7s 0.3s ease both; }
+  section { max-width: 760px; margin: 0 auto; padding: 0 20px 60px; }
+  .section-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--pink); margin-bottom: 20px; }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .service-card { background: var(--charcoal); border: 1px solid var(--grey); border-radius: 14px; padding: 18px 16px; cursor: pointer; transition: all 0.2s ease; position: relative; user-select: none; }
+  .service-card:hover { border-color: var(--pink); background: #1e1e1e; }
+  .service-card.selected { border-color: var(--pink); background: rgba(244,114,182,0.08); }
+  .service-card.selected::after { content: '✓'; position: absolute; top: 12px; right: 14px; color: var(--pink); font-size: 13px; font-weight: 700; }
+  .service-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .service-price { font-size: 12px; color: var(--muted); font-weight: 300; }
+  .form-row { margin-bottom: 18px; }
+  label { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  input, select, textarea { width: 100%; background: var(--charcoal); border: 1px solid var(--grey); border-radius: 10px; padding: 14px 16px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; appearance: none; }
+  input:focus, select:focus, textarea:focus { border-color: var(--pink); }
+  select option { background: var(--charcoal); }
+  textarea { resize: vertical; min-height: 90px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+  .payment-box { background: var(--charcoal); border: 1px solid rgba(244,114,182,0.3); border-radius: 16px; padding: 28px 24px; }
+  .payment-box h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 6px; }
+  .payment-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+  .bank-detail { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--grey); }
+  .bank-detail:last-of-type { border-bottom: none; }
+  .bank-key { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .bank-val { font-size: 14px; font-weight: 500; }
+  .copy-btn { background: none; border: 1px solid var(--grey); color: var(--muted); border-radius: 6px; padding: 5px 10px; font-size: 11px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .copy-btn:hover { border-color: var(--pink); color: var(--pink); }
+  .amount-note { margin-top: 18px; background: rgba(244,114,182,0.08); border: 1px solid rgba(244,114,182,0.2); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--pink-light); line-height: 1.6; }
+  .submit-btn { width: 100%; margin-top: 28px; padding: 18px; background: var(--pink); color: var(--black); border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+  .submit-btn:hover { background: var(--pink-deep); color: var(--white); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .success-screen { display: none; text-align: center; padding: 80px 24px; animation: fadeUp 0.5s ease both; }
+  .success-screen.show { display: block; }
+  .success-icon { width: 70px; height: 70px; border-radius: 50%; background: rgba(244,114,182,0.15); border: 2px solid var(--pink); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 24px; }
+  .success-screen h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 12px; }
+  .success-screen p { color: var(--muted); font-size: 15px; line-height: 1.7; }
+  footer { text-align: center; padding: 30px 20px 50px; color: var(--grey); font-size: 12px; }
+  footer span { color: var(--pink); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .steps { display: flex; justify-content: center; gap: 8px; margin: 36px 0 50px; animation: fadeUp 0.7s 0.4s ease both; }
+  .step { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .step.active { color: var(--white); }
+  .step-dot { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--grey); display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.3s; }
+  .step.active .step-dot { background: var(--pink); border-color: var(--pink); color: var(--black); font-weight: 700; }
+  .step-line { width: 30px; height: 1px; background: var(--grey); }
+  .nail-deco { text-align: center; font-size: 22px; margin-bottom: 14px; opacity: 0.6; }
+  .total-bar { position: sticky; bottom: 0; background: var(--charcoal); border-top: 1px solid rgba(244,114,182,0.3); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: all 0.3s; }
+  .total-bar.hidden { opacity: 0; pointer-events: none; transform: translateY(10px); }
+  .total-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
+  .total-amount { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--pink); }
+  .total-breakdown { font-size: 11px; color: var(--muted); max-width: 55%; text-align: right; line-height: 1.5; }
+  .finger-input { display: none; align-items: center; gap: 8px; margin-top: 8px; }
+  .finger-input.show { display: flex; }
+  .finger-input label { font-size: 11px; color: var(--muted); margin: 0; text-transform: none; letter-spacing: 0; }
+  .finger-input input { width: 60px; padding: 6px 10px; border-radius: 8px; font-size: 13px; border: 1px solid var(--grey); background: var(--black); color: var(--white); text-align: center; }
+  .summary-list { margin-top: 8px; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid var(--grey); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-total-row { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; padding: 12px 0 0; color: var(--pink); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-tag">Lagos · Nigeria</div>
+  <h1>Tobi <span>Nailed It</span></h1>
+  <p class="subtitle">Healthy, long-lasting gel nails tailored to you.</p>
+  <div class="divider"></div>
+</header>
+
+<div class="steps" id="stepsBar">
+  <div class="step active" id="step1ind"><div class="step-dot">1</div> Services</div>
+  <div class="step-line"></div>
+  <div class="step" id="step2ind"><div class="step-dot">2</div> Details</div>
+  <div class="step-line"></div>
+  <div class="step" id="step3ind"><div class="step-dot">3</div> Payment</div>
+</div>
+
+<section id="bookingForm">
+
+  <div id="stepServices">
+    <p class="section-label">Step 1 — Choose your service</p>
+    <div class="nail-deco">💅</div>
+    <div class="services-grid" id="servicesGrid"></div>
+    <div id="totalBar" class="total-bar hidden">
+      <div>
+        <div class="total-label">Estimated Total</div>
+        <div class="total-amount" id="totalDisplay">₦0</div>
+      </div>
+      <div class="total-breakdown" id="totalBreakdown"></div>
+    </div>
+    <div style="margin-top:28px; text-align:right;">
+      <button class="submit-btn" style="width:auto;padding:14px 36px;" onclick="goToStep2()">Continue →</button>
+    </div>
+  </div>
+
+  <div id="stepDetails" style="display:none;">
+    <p class="section-label">Step 2 — Your details</p>
+    <div class="form-row two-col">
+      <div><label>First Name</label><input type="text" id="firstName" placeholder="e.g. Amara" /></div>
+      <div><label>Last Name</label><input type="text" id="lastName" placeholder="e.g. Okafor" /></div>
+    </div>
+    <div class="form-row">
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="e.g. 08012345678" />
+    </div>
+    <div class="form-row two-col">
+      <div><label>Preferred Date</label><input type="date" id="apptDate" /></div>
+      <div>
+        <label>Preferred Time</label>
+        <select id="apptTime">
+          <option value="">-- Select --</option>
+          <option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+          <option>12:00 PM</option><option>1:00 PM</option><option>2:00 PM</option>
+          <option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Additional Notes (optional)</label>
+      <textarea id="notes" placeholder="Any design references, nail length preferences, etc."></textarea>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:10px;">
+      <button class="submit-btn" style="background:var(--grey);color:var(--white);width:auto;padding:14px 28px;" onclick="goToStep1()">← Back</button>
+      <button class="submit-btn" style="flex:1;" onclick="goToStep3()">Continue to Payment →</button>
+    </div>
+  </div>
+
+  <div id="stepPayment" style="display:none;">
+    <p class="section-label">Step 3 — Payment</p>
+    <div class="payment-box">
+      <h3>Bank Transfer</h3>
+      <p>Please make your payment using the details below. Use your <strong>name</strong> as the transfer description so we can confirm your booking.</p>
+      <div class="bank-detail"><div><div class="bank-key">Bank</div><div class="bank-val">OPay</div></div></div>
+      <div class="bank-detail">
+        <div><div class="bank-key">Account Number</div><div class="bank-val">7026481420</div></div>
+        <button class="copy-btn" onclick="copyText('7026481420', this)">Copy</button>
+      </div>
+      <div class="bank-detail"><div><div class="bank-key">Account Name</div><div class="bank-val">Osilokun Tobiloba</div></div></div>
+      <div class="amount-note" id="amountNote">
+        💳 <strong>Selected services:</strong>
+        <div class="summary-list" id="summaryList"></div>
+      </div>
+    </div>
+    <div style="margin-top:20px;background:var(--charcoal);border:1px solid var(--grey);border-radius:16px;padding:22px 24px;">
+      <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:14px;">Salon Rules</p>
+      <ul style="list-style:none;padding:0;font-size:13px;color:var(--muted);line-height:2;">
+        <li>🚫 No smoking · No pets · No kids</li>
+        <li>💸 No refunds — all sales are final</li>
+        <li>⏰ Lateness fee: ₦1,500 from 30 mins · ₦3,000 from 1 hr</li>
+        <li>📅 Rescheduling must be done at least a day before your appointment</li>
+        <li>✅ Payment validates your appointment</li>
+        <li>⚠️ Any material damage by client will be charged</li>
+        <li>🎨 Designs are charged separately</li>
+      </ul>
+      <p style="font-size:12px;color:rgba(244,114,182,0.7);margin-top:12px;">By confirming, you agree to the above terms.</p>
+    </div>
+    <div class="form-row" style="margin-top:24px;">
+      <label>Payment Reference / Screenshot description</label>
+      <input type="text" id="payRef" placeholder="e.g. Transferred ₦15,000 — Amara Okafor" />
+    </div>
+    <div style="display:flex;gap:12px;margin-top:4px;">
+      <button class="submit-btn" style="background:var(--grey);color:var(--white);width:auto;padding:14px 28px;">← Back</button>
+      <button class="submit-btn" style="flex:1;" onclick="submitBooking()">Confirm Booking ✓</button>
+    </div>
+  </div>
+
+</section>
+
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">💅</div>
+  <h2>You're <em style="font-style:italic;color:var(--pink)">Booked!</em></h2>
+  <p>Thank you! Your appointment request has been received.<br/>
+  Tobi will confirm your slot via WhatsApp or call within 24 hours.<br/><br/>
+  <span style="color:var(--pink);">Can't wait to nail it for you. 🌸</span></p>
+  <button class="submit-btn" style="max-width:260px;margin:36px auto 0;" onclick="resetForm()">Book Another Appointment</button>
+</div>
+
+<footer>&copy; 2025 <span>Tobi Nailed It</span> · Lagos, Nigeria · <span>07026481420</span></footer>
+
+<script>
+  const services = [
+    { name: "Gel Nails — Short", amount: 6000, cat: "Signature Gel Nails" },
+    { name: "Gel Nails — Medium", amount: 8000, cat: "Signature Gel Nails" },
+    { name: "Gel Nails — Long", amount: 10000, cat: "Signature Gel Nails" },
+    { name: "Gel Nails — XL", amount: 13000, cat: "Signature Gel Nails" },
+    { name: "Gel Nails — XXL", amount: 16000, cat: "Signature Gel Nails" },
+    { name: "Gel Nails — Natural", amount: 3000, cat: "Signature Gel Nails" },
+    { name: "Gel X — Short", amount: 7000, cat: "Soft Gel Extensions" },
+    { name: "Gel X — Medium", amount: 9000, cat: "Soft Gel Extensions" },
+    { name: "Gel X — Long", amount: 11000, cat: "Soft Gel Extensions" },
+    { name: "Gel X — XL", amount: 13000, cat: "Soft Gel Extensions" },
+    { name: "Gel X — XXL", amount: 15000, cat: "Soft Gel Extensions" },
+    { name: "BIAB — Natural", amount: 5000, cat: "BIAB & Hard Gel" },
+    { name: "BIAB — Short Extension", amount: 7000, cat: "BIAB & Hard Gel" },
+    { name: "BIAB — Re-fill", amount: 3000, cat: "BIAB & Hard Gel" },
+    { name: "Hard Gel — Medium Ext.", amount: 10000, cat: "BIAB & Hard Gel" },
+    { name: "Polygel — Short", amount: 8000, cat: "Polygel" },
+    { name: "Polygel — Medium", amount: 12000, cat: "Polygel" },
+    { name: "Polygel — Long", amount: 15000, cat: "Polygel" },
+    { name: "Polygel — XL", amount: 17000, cat: "Polygel" },
+    { name: "Polygel — XXL", amount: 19000, cat: "Polygel" },
+    { name: "Acrylics — Overlay", amount: 6000, cat: "Acrylics" },
+    { name: "Acrylics — Short", amount: 8000, cat: "Acrylics" },
+    { name: "Acrylics — Medium", amount: 10000, cat: "Acrylics" },
+    { name: "Acrylics — Long", amount: 13000, cat: "Acrylics" },
+    { name: "Acrylics — XL", amount: 15000, cat: "Acrylics" },
+    { name: "Acrylics — XXL", amount: 20000, cat: "Acrylics" },
+    { name: "Toes — Gel Plain", amount: 2000, cat: "Toes" },
+    { name: "Toes — Acrylics", amount: 6000, cat: "Toes" },
+    { name: "Toes — Fixing All Toes", amount: 4000, cat: "Toes" },
+    { name: "Gel Removal", amount: 2000, cat: "Removals" },
+    { name: "Acrylic Removal", amount: 4000, cat: "Removals" },
+    { name: "Polygel Removal", amount: 3000, cat: "Removals" },
+    { name: "Nail Art (full set)", amount: 1000, cat: "Extras", perFinger: false },
+    { name: "French Tip", amount: 200, cat: "Extras", perFinger: true },
+    { name: "Ombré", amount: 300, cat: "Extras", perFinger: true },
+    { name: "Chrome", amount: 400, cat: "Extras", perFinger: true },
+    { name: "Cat Eye", amount: 300, cat: "Extras", perFinger: true },
+    { name: "Marble", amount: 300, cat: "Extras", perFinger: true },
+    { name: "3D Design", amount: 500, cat: "Extras", perFinger: true },
+    { name: "Aura", amount: 300, cat: "Extras", perFinger: true },
+    { name: "Charms", amount: 500, cat: "Extras", perFinger: true },
+    { name: "Encapsulation", amount: 500, cat: "Extras", perFinger: true },
+    { name: "Blooming Gel", amount: 200, cat: "Extras", perFinger: true },
+    { name: "Single Stone", amount: 50, cat: "Extras", perFinger: true, unit: "stone" },
+  ];
+
+  const grid = document.getElementById('servicesGrid');
+  let selectedMap = {};
+  function fmt(n) { return '₦' + n.toLocaleString(); }
+
+  function recalc() {
+    let total = 0;
+    const lines = [];
+    Object.values(selectedMap).forEach(item => {
+      lines.push(item.fingers > 1 ? `${item.name} × ${item.fingers}` : item.name);
+      total += item.amount * item.fingers;
+    });
+    const bar = document.getElementById('totalBar');
+    document.getElementById('totalDisplay').textContent = fmt(total);
+    document.getElementById('totalBreakdown').textContent = lines.slice(-2).join(' · ');
+    bar.classList.toggle('hidden', total === 0);
+  }
+
+  const cats = [...new Set(services.map(s => s.cat))];
+  cats.forEach(cat => {
+    const heading = document.createElement('div');
+    heading.style.cssText = 'grid-column:1/-1;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);padding-top:10px;border-top:1px solid #2e2e2e;margin-top:4px;';
+    heading.textContent = cat;
+    grid.appendChild(heading);
+    services.filter(s => s.cat === cat).forEach(s => {
+      const priceLabel = s.perFinger ? fmt(s.amount) + '/' + (s.unit || 'finger') : fmt(s.amount);
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'display:flex;flex-direction:column;';
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.innerHTML = `<div class="service-name">${s.name}</div><div class="service-price">${priceLabel}</div>`;
+      const fingerRow = document.createElement('div');
+      fingerRow.className = 'finger-input';
+      if (s.perFinger) {
+        fingerRow.innerHTML = `<label style="margin:0;text-transform:none;letter-spacing:0;font-size:11px;">${s.unit === 'stone' ? 'How many stones?' : 'How many fingers?'}</label><input type="number" min="1" max="20" value="10" style="width:60px;padding:6px 10px;border-radius:8px;font-size:13px;border:1px solid #2e2e2e;background:#0d0d0d;color:#fff;text-align:center;" />`;
+      }
+      card.addEventListener('click', () => {
+        const isNowSelected = !card.classList.contains('selected');
+        card.classList.toggle('selected', isNowSelected);
+        if (s.perFinger) fingerRow.classList.toggle('show', isNowSelected);
+        if (isNowSelected) {
+          const fingers = s.perFinger ? parseInt(fingerRow.querySelector('input').value) || 10 : 1;
+          selectedMap[s.name] = { name: s.name, amount: s.amount, fingers };
+        } else { delete selectedMap[s.name]; }
+        recalc();
+      });
+      if (s.perFinger) {
+        fingerRow.addEventListener('click', e => e.stopPropagation());
+        fingerRow.querySelector('input')?.addEventListener('input', e => {
+          if (selectedMap[s.name]) { selectedMap[s.name].fingers = parseInt(e.target.value) || 1; recalc(); }
+        });
+      }
+      wrapper.appendChild(card);
+      if (s.perFinger) wrapper.appendChild(fingerRow);
+      grid.appendChild(wrapper);
+    });
+  });
+
+  function goToStep2() {
+    if (Object.keys(selectedMap).length === 0) { alert('Please select at least one service.'); return; }
+    document.getElementById('stepServices').style.display = 'none';
+    document.getElementById('stepDetails').style.display = 'block';
+    setStep(2); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function goToStep1() {
+    document.getElementById('stepDetails').style.display = 'none';
+    document.getElementById('stepServices').style.display = 'block';
+    setStep(1); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function goToStep3() {
+    const first = document.getElementById('firstName').value.trim();
+    const last = document.getElementById('lastName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const date = document.getElementById('apptDate').value;
+    const time = document.getElementById('apptTime').value;
+    if (!first || !last || !phone || !date || !time) { alert('Please fill in all required fields.'); return; }
+    let total = 0;
+    const list = document.getElementById('summaryList');
+    list.innerHTML = '';
+    Object.values(selectedMap).forEach(item => {
+      const lineTotal = item.amount * item.fingers;
+      total += lineTotal;
+      const row = document.createElement('div');
+      row.className = 'summary-row';
+      row.innerHTML = `<span>${item.fingers > 1 ? item.name + ' ×' + item.fingers : item.name}</span><span>${fmt(lineTotal)}</span>`;
+      list.appendChild(row);
+    });
+    const totalRow = document.createElement('div');
+    totalRow.className = 'summary-total-row';
+    totalRow.innerHTML = `<span>TOTAL</span><span>${fmt(total)}</span>`;
+    list.appendChild(totalRow);
+    document.getElementById('stepDetails').style.display = 'none';
+    document.getElementById('stepPayment').style.display = 'block';
+    setStep(3); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelector('#stepPayment button').addEventListener('click', function() {
+    document.getElementById('stepPayment').style.display = 'none';
+    document.getElementById('stepDetails').style.display = 'block';
+    setStep(2); window.scrollTo({top:0,behavior:'smooth'});
+  });
+  function submitBooking() {
+    const ref = document.getElementById('payRef').value.trim();
+    if (!ref) { alert('Please enter your payment reference so we can confirm your booking.'); return; }
+    document.getElementById('bookingForm').style.display = 'none';
+    document.getElementById('stepsBar').style.display = 'none';
+    document.getElementById('successScreen').classList.add('show');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function resetForm() { location.reload(); }
+  function setStep(n) { [1,2,3].forEach(i => document.getElementById('step'+i+'ind').classList.toggle('active', i===n)); }
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!'; btn.style.color = 'var(--pink)';
+      setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = ''; }, 2000);
+    });
+  }
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('apptDate').min = today;
+</script>
+</body>
+</html>
